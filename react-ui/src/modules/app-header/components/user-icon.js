@@ -1,19 +1,18 @@
 import React from 'react';
 import { useUserInfo } from '../../user-info-provider';
-import { useNavigate } from 'react-router';
+import { Avatar } from 'antd';
 
 export default function UserIcon() {
-    const { userName, resetUserInfo } = useUserInfo();
-    const navigate = useNavigate();
-    const logOut = () => {
-        resetUserInfo();
-        navigate('/');
-    };
-
+    const { userName } = useUserInfo();
     const userNickname = userName.split(' ')
         .reduce((nickname, word) => {
             return nickname + word.substring(0, 2).toLowerCase();
         }, '');
 
-    return <button onClick={logOut}>{userNickname}</button>;
+    const style = {
+        backgroundColor: '#34675C',
+        marginTop: '15px'
+    }
+
+    return <Avatar size={40} style={style}>{userNickname}</Avatar>;
 }

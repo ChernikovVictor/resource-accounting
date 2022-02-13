@@ -1,0 +1,22 @@
+.header {
+    background-color: #90AFC5;
+    overflow: auto;
+}
+
+.header-logo {
+    max-width: 300px;
+    max-height: 100px;
+    display: inline-block;
+}
+
+.header-logo img {
+    width: 65%;
+    height: 65%;
+}
+
+.header-tabs {
+    float: right;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

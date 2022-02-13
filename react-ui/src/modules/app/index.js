@@ -28,7 +28,7 @@ function App() {
                     <Route path="/generalInfo" element={<GeneralInfo />} />
                     <Route path="/timesheets" element={<Timesheets />} />
                     <Route path="/subordinates" element={<Subordinates />} />
-                    <Route path="/approving" element={<Approval />} />
+                    <Route path="/approval" element={<Approval />} />
                     <Route path="/salaryCalculation" element={<SalaryCalculation />} />
                     <Route path="/salaryRules" element={<SalaryRules />} />
                     <Route path="/employees" element={<Employees />} />

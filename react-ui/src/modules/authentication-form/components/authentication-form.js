@@ -1,14 +1,19 @@
 import React from 'react';
 import { useInput } from '../../hooks/use-input';
 import { useUserInfo } from '../../user-info-provider';
+import { Form, Input, Button } from 'antd';
+import 'antd/dist/antd.min.css';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import '../styles/authentication-form.css';
+import logo from '../../../assets/Netcracker-logo.png';
 
 export default function AuthenticationForm() {
     const [loginProps] = useInput('');
     const [passwordProps] = useInput('');
     const { setUserInfo } = useUserInfo();
 
-    const submit = (event) => {
-        event.preventDefault();
+    const onFinish = (values) => {
+        console.log('Received values of form: ', values);
         const uri = 'http://localhost:8080/credentials/authentication';
         const body = {
             login: loginProps.value,
@@ -50,13 +55,48 @@ export default function AuthenticationForm() {
     };
 
     return (
-        <>
-            <h2>Netcracker</h2>
-            <form onSubmit={submit}>
-                <input {...loginProps} type="text" required />
-                <input {...passwordProps} type="text" required />
-                <button>Log in</button>
-            </form>
-        </>
+        <div className="form-container">
+            <div className="logo">
+                <img src={logo} alt="logo" />
+            </div>
+            <Form name="loginForm" className="login-form" onFinish={onFinish}>
+                <Form.Item
+                    name="username"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your Username!'
+                        }
+                    ]}
+                >
+                    <Input
+                        {...loginProps}
+                        prefix={<UserOutlined className="site-form-item-icon" />}
+                        placeholder="Username"
+                    />
+                </Form.Item>
+                <Form.Item
+                    name="password"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your Password!'
+                        }
+                    ]}
+                >
+                    <Input
+                        {...passwordProps}
+                        prefix={<LockOutlined className="site-form-item-icon" />}
+                        type="password"
+                        placeholder="Password"
+                    />
+                </Form.Item>
+                <Form.Item>
+                    <Button type="primary" htmlType="submit" className="login-form-button">
+                        Log in
+                    </Button>
+                </Form.Item>
+            </Form>
+        </div>
     );
 }
