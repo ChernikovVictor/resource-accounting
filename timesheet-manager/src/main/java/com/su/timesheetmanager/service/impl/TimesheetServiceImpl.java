@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.su.timesheetmanager.dto.TimesheetDTO;
 import com.su.timesheetmanager.dto.mapper.TimesheetMapper;
+import com.su.timesheetmanager.model.Employee;
 import com.su.timesheetmanager.model.Timesheet;
 import com.su.timesheetmanager.model.TimesheetStatus;
 import com.su.timesheetmanager.repository.EmployeeRepository;
@@ -19,6 +20,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -38,6 +40,13 @@ public class TimesheetServiceImpl implements TimesheetService {
     public TimesheetDTO getById(Integer id) {
         Timesheet timesheet = timesheetRepository.findById(id).orElseThrow(RuntimeException::new);
         return mapper.timesheetToTimesheetDTO(timesheet);
+    }
+
+    @Override
+    public TimesheetDTO getByEmployeeAndPeriod(Integer employeeId, LocalDate period) {
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(RuntimeException::new);
+        Optional<Timesheet> timesheet = timesheetRepository.findByEmployeeAndPeriod(employee, period);
+        return timesheet.map(value -> mapper.timesheetToTimesheetDTO(value)).orElseThrow(RuntimeException::new);
     }
 
     @Override

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.Collections;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -69,5 +70,10 @@ public class TimesheetController {
         TimesheetDTO timesheetDTO = timesheetService.getById(timesheetId);
         timesheetService.setTimesheetStatus(timesheetDTO, TimesheetStatus.DECLINED, Collections.singletonList(managerId));
         timesheetService.updateTimesheet(timesheetDTO);
+    }
+
+    @GetMapping(value = "/timesheet-info")
+    public ResponseEntity<TimesheetDTO> getTimesheetForEmployee(@RequestParam Integer employeeId, @RequestParam String period) {
+        return  ResponseEntity.ok(timesheetService.getByEmployeeAndPeriod(employeeId, LocalDate.parse(period)));
     }
 }

@@ -3,11 +3,14 @@ package com.su.timesheetmanager.service;
 import com.su.timesheetmanager.dto.TimesheetDTO;
 import com.su.timesheetmanager.model.TimesheetStatus;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface TimesheetService {
 
     TimesheetDTO getById(Integer id);
+
+    TimesheetDTO getByEmployeeAndPeriod(Integer employeeId, LocalDate period);
 
     Integer createTimesheet(TimesheetDTO timesheetDTO);
 
