@@ -1,0 +1,20 @@
+.selectProject {
+    width: 250px;
+}
+
+.selectTime {
+    width: 110px;
+    padding-left: 10px;
+}
+
+.record-container {
+    display: flex;
+    align-items: center;
+    padding-bottom: 5px
+}
+
+.remove-record-icon {
+    font-size: 230%;
+    color: #FF420E;
+    margin-left: 295px;
+}
