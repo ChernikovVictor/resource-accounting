@@ -16,19 +16,11 @@ export default function Timesheet({ timesheet, setTimesheet }) {
 
     const { userId } = useUserInfo();
     useEffect(() => {
-        let period = moment().format('YYYY-MM-01');
-        fetch(`http://localhost:8080/timesheets/timesheet-info?employeeId=${userId}&period=${period}`)
-            .then((data) => data.json())
-            .then(setTimesheet)
-            .catch(() => alert('Error'));
+        retrieveTimesheetByDateAndEmployeeId(moment(), userId, setTimesheet);
     }, [userId]);
 
     const onPanelChange = (value) => {
-        let period = value.format('YYYY-MM-01');
-        fetch(`http://localhost:8080/timesheets/timesheet-info?employeeId=${userId}&period=${period}`)
-            .then((data) => data.json())
-            .then(setTimesheet)
-            .catch(() => alert('Error'));
+        retrieveTimesheetByDateAndEmployeeId(value, userId, setTimesheet);
     };
 
     const [currentDate, setCurrentDate] = useState(moment()); // fix for modal window open after panel change
@@ -123,4 +115,13 @@ function createModalContent(date, timesheet) {
     let day = date.date();
     let dayInfo = timesheet.data.days[day];
     return { date, dayInfo };
+}
+
+function retrieveTimesheetByDateAndEmployeeId(date, employeeId, setTimesheet) {
+    let period = date.format('YYYY-MM-01');
+    let uri = `http://localhost:8080/timesheets/timesheet-info?employeeId=${employeeId}&period=${period}&createIfMissing=true`;
+    fetch(uri)
+        .then((response) => response.json())
+        .then(setTimesheet)
+        .catch(() => alert('Error'));
 }

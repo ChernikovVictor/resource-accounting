@@ -74,8 +74,25 @@ public class TimesheetController {
     }
 
     @GetMapping(value = "/timesheet-info")
-    public ResponseEntity<TimesheetDTO> getTimesheetForEmployee(@RequestParam Integer employeeId, @RequestParam String period) {
-        return  ResponseEntity.ok(timesheetService.getByEmployeeAndPeriod(employeeId, LocalDate.parse(period)));
+    public ResponseEntity<TimesheetDTO> getTimesheetForEmployeeByPeriod(
+            @RequestParam Integer employeeId,
+            @RequestParam String period,
+            @RequestParam(required = false, defaultValue = "false") boolean createIfMissing
+    ) {
+        TimesheetDTO timesheetDTO = timesheetService.getByEmployeeAndPeriod(employeeId, LocalDate.parse(period));
+        if (timesheetDTO != null) {
+            return ResponseEntity.ok(timesheetDTO);
+        }
+        if (createIfMissing) {
+            timesheetDTO = TimesheetDTO.builder()
+                    .employeeId(employeeId)
+                    .period(LocalDate.parse(period))
+                    .build();
+            Integer id = timesheetService.createTimesheet(timesheetDTO);
+            return ResponseEntity.ok(timesheetService.getById(id));
+        } else {
+            throw new RuntimeException("Timesheet not found!");
+        }
     }
 
     @GetMapping(value = "/timesheet/status")

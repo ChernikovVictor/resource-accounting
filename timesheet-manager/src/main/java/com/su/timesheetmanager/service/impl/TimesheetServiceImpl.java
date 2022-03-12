@@ -48,7 +48,7 @@ public class TimesheetServiceImpl implements TimesheetService {
     public TimesheetDTO getByEmployeeAndPeriod(Integer employeeId, LocalDate period) {
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(RuntimeException::new);
         Optional<Timesheet> timesheet = timesheetRepository.findByEmployeeAndPeriod(employee, period);
-        return timesheet.map(value -> mapper.timesheetToTimesheetDTO(value)).orElseThrow(RuntimeException::new);
+        return timesheet.map(value -> mapper.timesheetToTimesheetDTO(value)).orElse(null);
     }
 
     @Override
