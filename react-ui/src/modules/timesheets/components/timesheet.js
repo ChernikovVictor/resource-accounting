@@ -31,11 +31,16 @@ export default function Timesheet({ timesheet, setTimesheet }) {
             .catch(() => alert('Error'));
     };
 
+    const [currentDate, setCurrentDate] = useState(moment()); // fix for modal window open after panel change
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [modalContent, setModalContent] = useState({});
-    const showModal = (date) => {
-        setModalContent(createModalContent(date, timesheet));
-        setIsModalVisible(true);
+    const onSelectDate = (date) => {
+        if (date.month() === currentDate.month() && date.year() === currentDate.year()) {
+            setModalContent(createModalContent(date, timesheet));
+            setIsModalVisible(true);
+        } else {
+            setCurrentDate(date);
+        }
     };
 
     const onComplete = (day, dayInfo) => {
@@ -54,7 +59,7 @@ export default function Timesheet({ timesheet, setTimesheet }) {
                 mode={'month'}
                 dateCellRender={(value) => dateCellRender(value, timesheet, projects)}
                 onPanelChange={onPanelChange}
-                onSelect={showModal}
+                onSelect={onSelectDate}
             />
             {isModalVisible && (
                 <TimesheetModal
