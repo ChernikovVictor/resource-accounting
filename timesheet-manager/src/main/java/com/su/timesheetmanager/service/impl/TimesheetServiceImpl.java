@@ -1,7 +1,9 @@
 package com.su.timesheetmanager.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.su.timesheetmanager.dto.TimesheetDTO;
 import com.su.timesheetmanager.dto.mapper.TimesheetMapper;
@@ -140,4 +142,34 @@ public class TimesheetServiceImpl implements TimesheetService {
         return projectIds.stream().map(Integer::valueOf).collect(Collectors.toList());
     }
 
+    @Override
+    public ArrayNode getTimesheetStatus(Integer id) {
+        Timesheet timesheet = timesheetRepository.findById(id).orElseThrow(RuntimeException::new);
+        JsonNode data = objectMapper.createObjectNode();
+        try {
+            data = objectMapper.readTree(timesheet.getData());
+        } catch (JsonProcessingException e) {
+            log.error("error ", e);
+            e.printStackTrace();
+        }
+        return getTimesheetStatus(data);
+    }
+
+    private ArrayNode getTimesheetStatus(JsonNode timesheetData) {
+        ArrayNode result = objectMapper.createArrayNode();
+        if (timesheetData.get("status") == null) {
+            return result;
+        }
+        JsonNode status = timesheetData.get("status");
+        status.fieldNames().forEachRemaining(key -> {
+            Optional<Employee> managerOptional = employeeRepository.findById(Integer.parseInt(key));
+            managerOptional.ifPresent(manager -> {
+                ObjectNode node = objectMapper.createObjectNode();
+                node.put("manager", manager.getFullname());
+                node.put("status", status.get(key).asText());
+                result.add(node);
+            });
+        });
+        return result;
+    }
 }

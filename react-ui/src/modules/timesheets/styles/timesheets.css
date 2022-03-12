@@ -1,0 +1,12 @@
+.statusDiv {
+    float: left;
+}
+
+.buttonsDiv {
+    float: right;
+    margin-top: 10px;
+}
+
+.buttonsDiv Button {
+    margin-right: 10px;
+}

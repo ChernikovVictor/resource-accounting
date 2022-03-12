@@ -5,7 +5,7 @@ import { useUserInfo } from '../../user-info-provider';
 import TimesheetModal from './timesheet-modal';
 import '../styles/timesheet.css'
 
-export default function Timesheet() {
+export default function Timesheet({ timesheet, setTimesheet }) {
     const [projects, setProjects] = useState([]);
     useEffect(() => {
         fetch('http://localhost:8080/projects/list')
@@ -15,7 +15,6 @@ export default function Timesheet() {
     }, []);
 
     const { userId } = useUserInfo();
-    const [timesheet, setTimesheet] = useState();
     useEffect(() => {
         let period = moment().format('YYYY-MM-01');
         fetch(`http://localhost:8080/timesheets/timesheet-info?employeeId=${userId}&period=${period}`)
@@ -49,9 +48,6 @@ export default function Timesheet() {
         setIsModalVisible(false);
     };
 
-    // let x = 1;
-    // let y = 4;
-    // console.log(timesheet.data.days[y][x]);
     return (
         <div className="timesheet">
             <Calendar

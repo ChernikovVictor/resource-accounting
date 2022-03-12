@@ -1,5 +1,6 @@
 package com.su.timesheetmanager.rest;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.su.timesheetmanager.dto.TimesheetDTO;
 import com.su.timesheetmanager.model.TimesheetStatus;
 import com.su.timesheetmanager.service.TimesheetService;
@@ -75,5 +76,10 @@ public class TimesheetController {
     @GetMapping(value = "/timesheet-info")
     public ResponseEntity<TimesheetDTO> getTimesheetForEmployee(@RequestParam Integer employeeId, @RequestParam String period) {
         return  ResponseEntity.ok(timesheetService.getByEmployeeAndPeriod(employeeId, LocalDate.parse(period)));
+    }
+
+    @GetMapping(value = "/timesheet/status")
+    public ArrayNode getTimesheetStatusById(@RequestParam Integer id) {
+        return timesheetService.getTimesheetStatus(id);
     }
 }

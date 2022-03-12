@@ -1,5 +1,6 @@
 package com.su.timesheetmanager.service;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.su.timesheetmanager.dto.TimesheetDTO;
 import com.su.timesheetmanager.model.TimesheetStatus;
 
@@ -21,4 +22,6 @@ public interface TimesheetService {
     TimesheetDTO sendForApproval(TimesheetDTO timesheetDTO);
 
     void setTimesheetStatus(TimesheetDTO timesheetDTO, TimesheetStatus status, List<Integer> managerIds);
+
+    ArrayNode getTimesheetStatus(Integer id);
 }
