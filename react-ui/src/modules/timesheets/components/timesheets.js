@@ -4,10 +4,12 @@ import '../styles/timesheets.css';
 import StatusList from './status-list';
 import ButtonSave from './button-save';
 import ButtonSubmit from './button-submit';
+import { useUserInfo } from '../../user-info-provider';
 
 export default function Timesheets() {
     const [timesheet, setTimesheet] = useState();
     const [timesheetStatus, setTimesheetStatus] = useState([]);
+    const { userId } = useUserInfo();
 
     useEffect(() => {
         if (!timesheet || !timesheet.id) {
@@ -21,7 +23,7 @@ export default function Timesheets() {
 
     return (
         <div>
-            <Timesheet timesheet={timesheet} setTimesheet={setTimesheet} />
+            <Timesheet timesheet={timesheet} setTimesheet={setTimesheet} employeeId={userId} />
             <div className="statusDiv">
                 <StatusList timesheetStatus={timesheetStatus} />
             </div>

@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Badge, Calendar } from 'antd';
 import moment from 'moment';
-import { useUserInfo } from '../../user-info-provider';
 import TimesheetModal from './timesheet-modal';
 import '../styles/timesheet.css'
 
-export default function Timesheet({ timesheet, setTimesheet }) {
+export default function Timesheet({ timesheet, setTimesheet, employeeId }) {
     const [projects, setProjects] = useState([]);
     useEffect(() => {
         fetch('http://localhost:8080/projects/list')
@@ -14,13 +13,12 @@ export default function Timesheet({ timesheet, setTimesheet }) {
             .catch(() => alert('Error'));
     }, []);
 
-    const { userId } = useUserInfo();
     useEffect(() => {
-        retrieveTimesheetByDateAndEmployeeId(moment(), userId, setTimesheet);
-    }, [userId]);
+        retrieveTimesheetByDateAndEmployeeId(moment(), employeeId, setTimesheet);
+    }, [employeeId]);
 
     const onPanelChange = (value) => {
-        retrieveTimesheetByDateAndEmployeeId(value, userId, setTimesheet);
+        retrieveTimesheetByDateAndEmployeeId(value, employeeId, setTimesheet);
     };
 
     const [currentDate, setCurrentDate] = useState(moment()); // fix for modal window open after panel change

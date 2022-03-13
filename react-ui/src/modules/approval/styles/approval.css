@@ -1,0 +1,18 @@
+.timesheetDiv {
+    width: 80%;
+    display: inline-block;
+}
+
+.subordinatesDiv {
+    width: 20%;
+    display: inline-block;
+}
+
+.approveButtonsPanelDiv {
+    float: right;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5px;
+}
