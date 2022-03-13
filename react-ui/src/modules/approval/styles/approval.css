@@ -1,11 +1,12 @@
 .timesheetDiv {
-    width: 80%;
-    display: inline-block;
+    width: 82%;
+    float: right;
 }
 
 .subordinatesDiv {
-    width: 20%;
-    display: inline-block;
+    width: 18%;
+    float: left;
+    border: 1px solid black;
 }
 
 .approveButtonsPanelDiv {

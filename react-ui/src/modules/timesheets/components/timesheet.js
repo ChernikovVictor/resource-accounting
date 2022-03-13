@@ -116,6 +116,9 @@ function createModalContent(date, timesheet) {
 }
 
 function retrieveTimesheetByDateAndEmployeeId(date, employeeId, setTimesheet) {
+    if (!employeeId || !date || !setTimesheet) {
+        return;
+    }
     let period = date.format('YYYY-MM-01');
     let uri = `http://localhost:8080/timesheets/timesheet-info?employeeId=${employeeId}&period=${period}&createIfMissing=true`;
     fetch(uri)

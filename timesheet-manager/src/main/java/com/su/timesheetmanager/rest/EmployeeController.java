@@ -1,6 +1,7 @@
 package com.su.timesheetmanager.rest;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.su.timesheetmanager.dto.EmployeeDTO;
 import com.su.timesheetmanager.service.EmployeeService;
 import lombok.AllArgsConstructor;
@@ -68,5 +69,10 @@ public class EmployeeController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void unassignEmployeeFromProjects(@RequestParam Integer employeeId, @RequestBody List<Integer> projectIds) {
         employeeService.unassignEmployeeFromProjects(employeeId, projectIds);
+    }
+
+    @GetMapping(value = "/subordinates")
+    public ArrayNode getSubordinatesList(@RequestParam Integer managerId) {
+        return employeeService.getSubordinates(managerId);
     }
 }

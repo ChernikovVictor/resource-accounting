@@ -44,4 +44,15 @@ public class Employee {
     @JoinColumn(name = "linear_manager_id")
     private Employee linearManager;
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        Employee employee = (Employee) obj;
+        return this.id.equals(employee.id);
+    }
 }

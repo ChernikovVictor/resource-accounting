@@ -110,4 +110,42 @@ public class EmployeeServiceImpl implements EmployeeService {
         long deleted = projectEmployeeRepository.deleteById_EmployeeIdAndId_ProjectIdIn(employeeId, projectIds);
         log.info("were deleted: {}", deleted);
     }
+
+    @Override
+    public ArrayNode getSubordinates(Integer managerId) {
+        EmployeeDTO manager = getById(managerId);
+        switch (manager.getRole()) {
+            case LINEAR_MANAGER:
+                return findSubordinatesForLM(managerId);
+            case PROJECT_MANAGER:
+                return findSubordinatesForPM(managerId);
+            case LM_PM:
+                return findSubordinatesForLM_PM(managerId);
+            default:
+                throw new RuntimeException(String.format("Employee role is not manager, id = %d", managerId));
+        }
+    }
+
+    private ArrayNode findSubordinatesForLM(Integer managerId) {
+        List<Employee> subordinates = employeeRepository.findSubordinatesByLinearManagerId(managerId);
+        return mapper.employeesToSubordinatesArrayNode(subordinates, "LINEAR");
+    }
+
+    private ArrayNode findSubordinatesForPM(Integer managerId) {
+        List<Employee> subordinates = employeeRepository.findSubordinatesByProjectManagerId(managerId);
+        return mapper.employeesToSubordinatesArrayNode(subordinates, "PROJECT");
+    }
+
+    private ArrayNode findSubordinatesForLM_PM(Integer managerId) {
+        List<Employee> linearSubordinates = employeeRepository.findSubordinatesByLinearManagerId(managerId);
+        List<Employee> projectSubordinates = employeeRepository.findSubordinatesByProjectManagerId(managerId);
+        List<Employee> bothSubordinates = linearSubordinates.stream().filter(projectSubordinates::contains)
+                .collect(Collectors.toList());
+        linearSubordinates.removeIf(bothSubordinates::contains);
+        projectSubordinates.removeIf(bothSubordinates::contains);
+        ArrayNode result = mapper.employeesToSubordinatesArrayNode(bothSubordinates, "BOTH");
+        result.addAll(mapper.employeesToSubordinatesArrayNode(linearSubordinates, "LINEAR"));
+        result.addAll(mapper.employeesToSubordinatesArrayNode(projectSubordinates, "PROJECT"));
+        return result;
+    }
 }
