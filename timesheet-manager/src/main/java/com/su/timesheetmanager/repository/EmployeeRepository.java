@@ -1,6 +1,7 @@
 package com.su.timesheetmanager.repository;
 
 import com.su.timesheetmanager.model.Employee;
+import com.su.timesheetmanager.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,4 +20,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
             "WHERE project_id = (SELECT id FROM projects WHERE PM_id = :managerId)" +
             ");", nativeQuery = true)
     List<Employee> findSubordinatesByProjectManagerId(@Param("managerId") Integer managerId);
+
+    List<Employee> findByRoleIn(Collection<Role> roles);
 }

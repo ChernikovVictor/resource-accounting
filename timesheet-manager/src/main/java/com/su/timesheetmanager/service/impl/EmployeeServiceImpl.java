@@ -10,6 +10,7 @@ import com.su.timesheetmanager.model.Employee;
 import com.su.timesheetmanager.model.Project;
 import com.su.timesheetmanager.model.ProjectEmployee;
 import com.su.timesheetmanager.model.ProjectEmployeeId;
+import com.su.timesheetmanager.model.Role;
 import com.su.timesheetmanager.repository.EmployeeRepository;
 import com.su.timesheetmanager.repository.ProjectEmployeeRepository;
 import com.su.timesheetmanager.repository.ProjectRepository;
@@ -19,8 +20,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -147,5 +152,19 @@ public class EmployeeServiceImpl implements EmployeeService {
         result.addAll(mapper.employeesToSubordinatesArrayNode(linearSubordinates, "LINEAR"));
         result.addAll(mapper.employeesToSubordinatesArrayNode(projectSubordinates, "PROJECT"));
         return result;
+    }
+
+    @Override
+    public List<EmployeeDTO> getProjectManagers(boolean onlyFree) {
+        List<Role> roles = Arrays.asList(Role.PROJECT_MANAGER, Role.LM_PM);
+        List<Employee> projectManagers = employeeRepository.findByRoleIn(roles);
+        if (onlyFree) {
+            Set<Employee> notFreeProjectManagers = projectRepository.findAll().stream()
+                    .map(Project::getProjectManager)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toSet());
+            projectManagers.removeIf(notFreeProjectManagers::contains);
+        }
+        return mapper.employeeListToDTOs(projectManagers);
     }
 }

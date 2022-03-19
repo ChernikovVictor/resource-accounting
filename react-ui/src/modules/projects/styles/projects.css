@@ -1,0 +1,8 @@
+.projectsDiv {
+    margin: 10px;
+    padding: 10px;
+}
+
+.projectsDiv > Button {
+    margin-bottom: 10px;
+}

@@ -75,4 +75,9 @@ public class EmployeeController {
     public ArrayNode getSubordinatesList(@RequestParam Integer managerId) {
         return employeeService.getSubordinates(managerId);
     }
+
+    @GetMapping(value = "/project-managers")
+    public List<EmployeeDTO> getProjectManagers(@RequestParam(required = false, defaultValue = "false") boolean onlyFree) {
+        return employeeService.getProjectManagers(onlyFree);
+    }
 }

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ModalOptions from './timesheet-modal-options';
 import Modal from 'antd/es/modal/Modal';
 
-export default function TimesheetModal({ modalContent, isModalVisible, projects, onComplete, onCancel }) {
+export default function TimesheetModal({ modalContent, projects, onComplete, onCancel }) {
     const date = modalContent.date;
     const modalTitle = date.format('D MMMM, YYYY');
     const recordsInitialState = dayInfoToRecords(modalContent.dayInfo);
@@ -10,7 +10,7 @@ export default function TimesheetModal({ modalContent, isModalVisible, projects,
     return (
         <Modal
             title={modalTitle}
-            visible={isModalVisible}
+            visible="true"
             onOk={() => onComplete(date.date(), recordsToDayInfo(records))}
             onCancel={onCancel}
         >

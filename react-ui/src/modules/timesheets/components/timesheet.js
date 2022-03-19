@@ -54,7 +54,6 @@ export default function Timesheet({ timesheet, setTimesheet, employeeId }) {
             {isModalVisible && (
                 <TimesheetModal
                     modalContent={modalContent}
-                    isModalVisible={isModalVisible}
                     projects={projects}
                     onComplete={onComplete}
                     onCancel={onCancel}

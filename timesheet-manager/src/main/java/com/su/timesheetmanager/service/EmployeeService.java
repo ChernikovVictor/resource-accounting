@@ -23,4 +23,6 @@ public interface EmployeeService {
     void unassignEmployeeFromProjects(Integer employeeId, List<Integer> projectIds);
 
     ArrayNode getSubordinates(Integer managerId);
+
+    List<EmployeeDTO> getProjectManagers(boolean onlyFree);
 }
