@@ -25,7 +25,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping(value = "/employees", produces = APPLICATION_JSON_VALUE)
 @AllArgsConstructor
 public class EmployeeController {
-    
+
     private EmployeeService employeeService;
 
     @GetMapping(value = "/list")
@@ -61,8 +61,10 @@ public class EmployeeController {
 
     @PostMapping(value = "/projects")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void assignEmployeeToProjects(@RequestParam Integer employeeId, @RequestBody List<Integer> projectIds) {
-        employeeService.assignEmployeeToProjects(employeeId, projectIds);
+    public void assignEmployeeToProjects(@RequestParam Integer employeeId,
+                                         @RequestParam(required = false, defaultValue = "false") boolean isOverwrite,
+                                         @RequestBody List<Integer> projectIds) {
+        employeeService.assignEmployeeToProjects(employeeId, projectIds, isOverwrite);
     }
 
     @DeleteMapping(value = "/projects")
@@ -84,6 +86,12 @@ public class EmployeeController {
     @GetMapping(value = "/linear-managers")
     public List<EmployeeDTO> getLinearManagers() {
         return employeeService.getLinearManagers();
+    }
+
+    @GetMapping(value = "/linear-subordinates")
+    public ArrayNode getLinearSubordinates(@RequestParam Integer managerId,
+                                                   @RequestParam(required = false, defaultValue = "false") boolean withAssignedProjects) {
+        return employeeService.getLinearSubordinates(managerId, withAssignedProjects);
     }
 
     @GetMapping(value = "/employee-roles")

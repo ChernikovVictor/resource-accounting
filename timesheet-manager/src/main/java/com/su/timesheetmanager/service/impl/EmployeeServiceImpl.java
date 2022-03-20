@@ -99,7 +99,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void assignEmployeeToProjects(Integer employeeId, List<Integer> projectIds) {
+    @Transactional
+    public void assignEmployeeToProjects(Integer employeeId, List<Integer> projectIds, boolean isOverwrite) {
+        if (isOverwrite) {
+            ArrayNode assignedProjects = (ArrayNode) getAssignedProjects(employeeId);
+            List<Integer> ids = new ArrayList<>();
+            assignedProjects.forEach(project -> ids.add(project.get("id").asInt()));
+            unassignEmployeeFromProjects(employeeId, ids);
+        }
         List<ProjectEmployee> entities = new LinkedList<>();
         for (Integer projectId : projectIds) {
             ProjectEmployeeId projectEmployeeId = new ProjectEmployeeId(projectId, employeeId);
@@ -179,5 +186,20 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<String> getAllEmployeeRoles() {
         return Arrays.stream(Role.values()).map(Objects::toString)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ArrayNode getLinearSubordinates(Integer managerId, boolean withAssignedProjects) {
+        List<EmployeeDTO> linearSubordinates = mapper.employeeListToDTOs(employeeRepository.findSubordinatesByLinearManagerId(managerId));
+        ArrayNode result = objectMapper.createArrayNode();
+        for (EmployeeDTO employeeDTO : linearSubordinates) {
+            ObjectNode employeeNode = objectMapper.valueToTree(employeeDTO);
+            if (withAssignedProjects) {
+                JsonNode assignedProjects = getAssignedProjects(employeeDTO.getId());
+                employeeNode.set("assignedProjects", assignedProjects);
+            }
+            result.add(employeeNode);
+        }
+        return result;
     }
 }

@@ -19,7 +19,7 @@ public interface EmployeeService {
     void deleteEmployee(Integer id);
 
     JsonNode getAssignedProjects(Integer employeeId);
-    void assignEmployeeToProjects(Integer employeeId, List<Integer> projectIds);
+    void assignEmployeeToProjects(Integer employeeId, List<Integer> projectIds, boolean isOverwrite);
     void unassignEmployeeFromProjects(Integer employeeId, List<Integer> projectIds);
 
     ArrayNode getSubordinates(Integer managerId);
@@ -28,4 +28,6 @@ public interface EmployeeService {
     List<EmployeeDTO> getLinearManagers();
 
     List<String> getAllEmployeeRoles();
+
+    ArrayNode getLinearSubordinates(Integer managerId, boolean withAssignedProjects);
 }
