@@ -20,6 +20,7 @@ public class EmployeeMapper {
         Integer linearManagerId = (linearManager == null) ? null : linearManager.getId();
         String linearManagerName = (linearManager == null) ? null : linearManager.getFullname();
         String linearManagerPosition = (linearManager == null) ? null : linearManager.getPosition();
+        String linearManagerEmail = (linearManager == null) ? null : linearManager.getEmail();
         return EmployeeDTO.builder()
                 .id(employee.getId())
                 .fullname(employee.getFullname())
@@ -30,6 +31,7 @@ public class EmployeeMapper {
                 .linearManagerId(linearManagerId)
                 .linearManagerName(linearManagerName)
                 .linearManagerPosition(linearManagerPosition)
+                .linearManagerEmail(linearManagerEmail)
                 .build();
     }
 

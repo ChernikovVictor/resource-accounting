@@ -1,0 +1,23 @@
+.generalInfoDiv {
+    width: 60%;
+    margin-Left: 20%;
+    background-color: papayawhip;
+    text-align: center;
+    padding: 10px 0
+}
+
+#mainDivider {
+    font: 35px 'Oswald', sans-serif;
+    font-weight: 300
+}
+
+.generalInfoList {
+    text-align: left;
+    font: 20px 'Oswald', sans-serif;
+    font-weight: 300;
+    margin-left: 30%
+}
+
+.generalInfoList li {
+    margin-bottom: 10px;
+}

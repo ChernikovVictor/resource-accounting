@@ -93,6 +93,9 @@ public class EmployeeServiceImpl implements EmployeeService {
             ObjectNode node = objectMapper.createObjectNode();
             node.put("id", project.getId());
             node.put("name", project.getName());
+            node.put("projectManagerName", project.getProjectManager().getFullname());
+            node.put("projectManagerEmail", project.getProjectManager().getEmail());
+            node.put("projectManagerPosition", project.getProjectManager().getPosition());
             result.add(node);
         }
         return result;

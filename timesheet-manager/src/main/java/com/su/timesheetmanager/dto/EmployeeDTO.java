@@ -16,4 +16,5 @@ public class EmployeeDTO {
     private Integer linearManagerId;
     private String linearManagerName;
     private String linearManagerPosition;
+    private String linearManagerEmail;
 }
