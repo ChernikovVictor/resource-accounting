@@ -80,4 +80,14 @@ public class EmployeeController {
     public List<EmployeeDTO> getProjectManagers(@RequestParam(required = false, defaultValue = "false") boolean onlyFree) {
         return employeeService.getProjectManagers(onlyFree);
     }
+
+    @GetMapping(value = "/linear-managers")
+    public List<EmployeeDTO> getLinearManagers() {
+        return employeeService.getLinearManagers();
+    }
+
+    @GetMapping(value = "/employee-roles")
+    public List<String> getAllEmployeeRoles() {
+        return employeeService.getAllEmployeeRoles();
+    }
 }

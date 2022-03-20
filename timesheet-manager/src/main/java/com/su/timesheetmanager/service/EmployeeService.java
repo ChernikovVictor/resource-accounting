@@ -25,4 +25,7 @@ public interface EmployeeService {
     ArrayNode getSubordinates(Integer managerId);
 
     List<EmployeeDTO> getProjectManagers(boolean onlyFree);
+    List<EmployeeDTO> getLinearManagers();
+
+    List<String> getAllEmployeeRoles();
 }

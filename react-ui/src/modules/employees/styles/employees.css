@@ -1,9 +1,9 @@
-.projectsDiv {
+.employeesDiv {
     padding: 10px;
     width: 60%;
     margin: 10px 10px 10px 20%;
 }
 
-.projectsDiv > Button {
+.employeesDiv > Button {
     margin-bottom: 10px;
 }

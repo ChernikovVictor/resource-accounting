@@ -31,4 +31,10 @@ public class CredentialsServiceImpl implements CredentialsService {
             throw new RuntimeException("Wrong login or password");
         }
     }
+
+    @Override
+    public CredentialsDTO findById(Integer employeeId) {
+        Credentials credentials = credentialsRepository.findById(employeeId).orElseThrow(RuntimeException::new);
+        return mapper.credentialsToCredentialsDTO(credentials);
+    }
 }

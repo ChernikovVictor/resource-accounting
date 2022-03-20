@@ -81,7 +81,8 @@ const createColumns = (setEditableProjectId, setIsEditModalVisible, handleProjec
     {
         title: 'Project Manager',
         dataIndex: 'projectManagerName',
-        key: 'projectManagerName'
+        key: 'projectManagerName',
+        width: '300px'
     },
     {
         title: 'Edit',

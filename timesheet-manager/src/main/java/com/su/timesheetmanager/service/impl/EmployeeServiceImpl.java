@@ -167,4 +167,17 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         return mapper.employeeListToDTOs(projectManagers);
     }
+
+    @Override
+    public List<EmployeeDTO> getLinearManagers() {
+        List<Role> roles = Arrays.asList(Role.LINEAR_MANAGER, Role.LM_PM);
+        List<Employee> linearManagers = employeeRepository.findByRoleIn(roles);
+        return mapper.employeeListToDTOs(linearManagers);
+    }
+
+    @Override
+    public List<String> getAllEmployeeRoles() {
+        return Arrays.stream(Role.values()).map(Objects::toString)
+                .collect(Collectors.toList());
+    }
 }

@@ -7,4 +7,6 @@ public interface CredentialsService {
     Integer createCredentials(CredentialsDTO credentialsDTO);
 
     Integer authenticateUser(CredentialsDTO credentialsDTO);
+
+    CredentialsDTO findById(Integer employeeId);
 }
