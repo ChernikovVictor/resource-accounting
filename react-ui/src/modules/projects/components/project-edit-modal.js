@@ -4,7 +4,7 @@ import { Form, Input, Select } from 'antd';
 
 const { Option } = Select;
 
-export default function ProjectEditModal({ projectId, onCancel, handleProjectEdition }) {
+export default function ProjectEditModal({ project, onCancel, handleProjectEdition }) {
     const [projectManagers, setProjectManagers] = useState([]);
     useEffect(() => {
         fetch('http://localhost:8080/employees/project-managers?onlyFree=true')
@@ -14,23 +14,13 @@ export default function ProjectEditModal({ projectId, onCancel, handleProjectEdi
     }, []);
 
     const [form] = Form.useForm();
-    const [currentPM, setCurrentPM] = useState();
     useEffect(() => {
-        fetch(`http://localhost:8080/projects/project?id=${projectId}`)
-            .then((response) => response.json())
-            .then((data) => {
-                form.setFieldsValue({
-                    name: data.name,
-                    budget: data.budget,
-                    projectManagerId: data.projectManagerName
-                });
-                setCurrentPM({
-                    id: data.projectManagerId,
-                    name: data.projectManagerName
-                });
-            })
-            .catch(() => alert('Error'));
-    }, [form, projectId]);
+        form.setFieldsValue({
+            name: project.name,
+            budget: project.budget,
+            projectManagerId: project.projectManagerId
+        });
+    }, [form, project]);
 
     const saveProject = async () => {
         try {
@@ -38,17 +28,11 @@ export default function ProjectEditModal({ projectId, onCancel, handleProjectEdi
             console.log('formValues:', formValues);
             let uri = 'http://localhost:8080/projects/project';
             let body = {
-                id: projectId,
+                ...project,
                 name: formValues.name,
-                budget: formValues.budget
+                budget: formValues.budget,
+                projectManagerId: formValues.projectManagerId ? formValues.projectManagerId : null
             };
-            if (formValues.projectManagerId) {
-                if (formValues.projectManagerId === currentPM.name) {
-                    body.projectManagerId = currentPM.id;
-                } else {
-                    body.projectManagerId = formValues.projectManagerId;
-                }
-            }
             const fetchSetting = {
                 method: 'PUT',
                 headers: {
@@ -101,9 +85,10 @@ export default function ProjectEditModal({ projectId, onCancel, handleProjectEdi
                     <Input placeholder="Budget" />
                 </Form.Item>
                 <Form.Item name="projectManagerId" label="Project Manager">
-                    <Select allowClear="true">
+                    <Select allowClear="true" defaultValue={project.projectManagerId}>
+                        <Option key={project.projectManagerId} value={project.projectManagerId}>{project.projectManagerName}</Option>
                         {projectManagers.map((projectManager) => (
-                            <Option key={projectManager.id}>{projectManager.fullname}</Option>
+                            <Option key={projectManager.id} value={projectManager.id}>{projectManager.fullname}</Option>
                         ))}
                     </Select>
                 </Form.Item>

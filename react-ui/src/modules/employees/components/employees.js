@@ -62,7 +62,7 @@ export default function Employees() {
             )}
             {isEditModalVisible && (
                 <EmployeeEditModal
-                    employeeId={editableEmployeeId}
+                    employee={employees.find(employee => employee.id === editableEmployeeId)}
                     onCancel={() => setIsEditModalVisible(false)}
                     handleEmployeeEdition={handleEmployeeEdition}
                 />

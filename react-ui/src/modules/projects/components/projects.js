@@ -51,7 +51,7 @@ export default function Projects() {
             )}
             {isEditModalVisible && (
                 <ProjectEditModal
-                    projectId={editableProjectId}
+                    project={projects.find((project) => project.id === editableProjectId)}
                     onCancel={() => setIsEditModalVisible(false)}
                     handleProjectEdition={handleProjectEdition}
                 />

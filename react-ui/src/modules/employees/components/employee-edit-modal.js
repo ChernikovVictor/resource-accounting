@@ -4,7 +4,7 @@ import { Form, Input, Select } from 'antd';
 
 const Option = { Select };
 
-export default function EmployeeEditModal({ employeeId, onCancel, handleEmployeeEdition }) {
+export default function EmployeeEditModal({ employee, onCancel, handleEmployeeEdition }) {
     const [linearManagers, setLinearManagers] = useState([]);
     useEffect(() => {
         fetch('http://localhost:8080/employees/linear-managers')
@@ -21,23 +21,15 @@ export default function EmployeeEditModal({ employeeId, onCancel, handleEmployee
             .catch(() => alert('Error'));
     }, []);
 
-    const [employeeInfo, setEmployeeInfo] = useState({});
-    useEffect(() => {
-        fetch(`http://localhost:8080/employees/employee?id=${employeeId}`)
-            .then((response) => response.json())
-            .then(setEmployeeInfo)
-            .catch(() => alert('Error'));
-    }, [employeeId]);
-
     const [form] = Form.useForm();
     useEffect(() => {
         form.setFieldsValue({
-            fullname: employeeInfo.fullname,
-            email: employeeInfo.email,
-            role: employeeInfo.role,
-            linearManagerId: employeeInfo.linearManagerName
+            fullname: employee.fullname,
+            email: employee.email,
+            role: employee.role,
+            linearManagerId: employee.linearManagerId
         });
-    }, [form, employeeInfo]);
+    }, [form, employee]);
 
     const saveEmployee = async () => {
         try {
@@ -45,14 +37,12 @@ export default function EmployeeEditModal({ employeeId, onCancel, handleEmployee
             console.log('formValues:', formValues);
             let uri = 'http://localhost:8080/employees/employee';
             let body = {
-                ...employeeInfo,
+                ...employee,
                 fullname: formValues.fullname,
                 email: formValues.email,
-                role: formValues.role
+                role: formValues.role,
+                linearManagerId: formValues.linearManagerId ? formValues.linearManagerId : null
             };
-            if (formValues.linearManagerId !== employeeInfo.linearManagerName) {
-                body.linearManagerId = formValues.linearManagerId;
-            }
             const fetchSetting = {
                 method: 'PUT',
                 headers: {
@@ -117,9 +107,9 @@ export default function EmployeeEditModal({ employeeId, onCancel, handleEmployee
                     </Select>
                 </Form.Item>
                 <Form.Item name="linearManagerId" label="Linear Manager">
-                    <Select allowClear="true">
+                    <Select allowClear="true" defaultValue={employee.linearManagerId}>
                         {linearManagers.map((linearManager) => (
-                            <Option key={linearManager.id}>{linearManager.fullname}</Option>
+                            <Option key={linearManager.id} value={linearManager.id}>{linearManager.fullname}</Option>
                         ))}
                     </Select>
                 </Form.Item>
