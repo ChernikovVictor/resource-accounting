@@ -7,11 +7,11 @@ import '../styles/timesheet.css'
 export default function Timesheet({ timesheet, setTimesheet, employeeId }) {
     const [projects, setProjects] = useState([]);
     useEffect(() => {
-        fetch('http://localhost:8080/projects/list')
+        fetch(`http://localhost:8080/employees/projects?employeeId=${employeeId}&withSocial=true`)
             .then((data) => data.json())
             .then(setProjects)
             .catch(() => alert('Error'));
-    }, []);
+    }, [employeeId]);
 
     useEffect(() => {
         retrieveTimesheetByDateAndEmployeeId(moment(), employeeId, setTimesheet);

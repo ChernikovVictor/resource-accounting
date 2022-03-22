@@ -55,8 +55,9 @@ public class EmployeeController {
     }
 
     @GetMapping(value = "/projects")
-    public JsonNode getAssignedProjects(@RequestParam Integer employeeId) {
-        return employeeService.getAssignedProjects(employeeId);
+    public JsonNode getAssignedProjects(@RequestParam Integer employeeId,
+                                        @RequestParam(required = false, defaultValue = "false") boolean withSocial) {
+        return employeeService.getAssignedProjects(employeeId, withSocial);
     }
 
     @PostMapping(value = "/projects")
@@ -90,7 +91,7 @@ public class EmployeeController {
 
     @GetMapping(value = "/linear-subordinates")
     public ArrayNode getLinearSubordinates(@RequestParam Integer managerId,
-                                                   @RequestParam(required = false, defaultValue = "false") boolean withAssignedProjects) {
+                                           @RequestParam(required = false, defaultValue = "false") boolean withAssignedProjects) {
         return employeeService.getLinearSubordinates(managerId, withAssignedProjects);
     }
 

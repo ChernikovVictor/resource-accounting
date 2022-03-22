@@ -18,7 +18,7 @@ public interface EmployeeService {
 
     void deleteEmployee(Integer id);
 
-    JsonNode getAssignedProjects(Integer employeeId);
+    JsonNode getAssignedProjects(Integer employeeId, boolean withSocial);
     void assignEmployeeToProjects(Integer employeeId, List<Integer> projectIds, boolean isOverwrite);
     void unassignEmployeeFromProjects(Integer employeeId, List<Integer> projectIds);
 

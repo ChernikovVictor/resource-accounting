@@ -83,7 +83,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public JsonNode getAssignedProjects(Integer employeeId) {
+    public JsonNode getAssignedProjects(Integer employeeId, boolean withSocial) {
         List<Integer> projectIds = projectEmployeeRepository.findById_EmployeeId(employeeId)
                 .stream().map(entity -> entity.getId().getProjectId())
                 .collect(Collectors.toList());
@@ -93,19 +93,40 @@ public class EmployeeServiceImpl implements EmployeeService {
             ObjectNode node = objectMapper.createObjectNode();
             node.put("id", project.getId());
             node.put("name", project.getName());
-            node.put("projectManagerName", project.getProjectManager().getFullname());
-            node.put("projectManagerEmail", project.getProjectManager().getEmail());
-            node.put("projectManagerPosition", project.getProjectManager().getPosition());
+            Employee projectManager = project.getProjectManager();
+            if (projectManager != null) {
+                node.put("projectManagerId", projectManager.getId());
+                node.put("projectManagerName", projectManager.getFullname());
+                node.put("projectManagerEmail", projectManager.getEmail());
+                node.put("projectManagerPosition", projectManager.getPosition());
+            }
             result.add(node);
         }
+
+        if (withSocial) {
+            List<Project> socialProjects = getSocialProjects();
+            for (Project project : socialProjects) {
+                ObjectNode node = objectMapper.createObjectNode();
+                node.put("id", project.getId());
+                node.put("name", project.getName());
+                result.add(node);
+            }
+        }
+
         return result;
+    }
+
+    // TODO: extract social projects to env vars or constants
+    private List<Project> getSocialProjects() {
+        List<String> socialProjectNames = Arrays.asList("Vacation", "Sick leave", "Business trip");
+        return projectRepository.findByNameIn(socialProjectNames);
     }
 
     @Override
     @Transactional
     public void assignEmployeeToProjects(Integer employeeId, List<Integer> projectIds, boolean isOverwrite) {
         if (isOverwrite) {
-            ArrayNode assignedProjects = (ArrayNode) getAssignedProjects(employeeId);
+            ArrayNode assignedProjects = (ArrayNode) getAssignedProjects(employeeId, false);
             List<Integer> ids = new ArrayList<>();
             assignedProjects.forEach(project -> ids.add(project.get("id").asInt()));
             unassignEmployeeFromProjects(employeeId, ids);
@@ -198,7 +219,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         for (EmployeeDTO employeeDTO : linearSubordinates) {
             ObjectNode employeeNode = objectMapper.valueToTree(employeeDTO);
             if (withAssignedProjects) {
-                JsonNode assignedProjects = getAssignedProjects(employeeDTO.getId());
+                JsonNode assignedProjects = getAssignedProjects(employeeDTO.getId(), false);
                 employeeNode.set("assignedProjects", assignedProjects);
             }
             result.add(employeeNode);

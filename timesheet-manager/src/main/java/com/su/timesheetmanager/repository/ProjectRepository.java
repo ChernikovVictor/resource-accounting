@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface ProjectRepository extends JpaRepository<Project, Integer> {
     List<Project> findByIdIn(Collection<Integer> ids);
+    List<Project> findByNameIn(Collection<String> names);
 }
